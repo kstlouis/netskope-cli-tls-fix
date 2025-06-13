@@ -73,7 +73,7 @@ configure_tool() {
 }
 
 # This allows for later silent runs on other machines
-#> configured_tools.sh
+> configured_tools.sh
 
 # Configure tools
 configure_tool "gam" "" "/Users/$CURRENT_USER/bin/gamadv-xtd3/gam" "/Users/$CURRENT_USER/bin/gamadv-xtd3/gam config cacerts_pem $certDir/$certName save"
