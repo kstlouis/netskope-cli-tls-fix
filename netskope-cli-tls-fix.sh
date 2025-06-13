@@ -21,22 +21,53 @@ get_shell(){
         shell="/Users/$CURRENT_USER/.zshenv"
     fi
     echo "Config file: $shell"
+
+    # Ensure the shell config file exists before using it
+    if [[ ! -f "$shell" ]]; then
+    echo "# Created by get_shell script" > "$shell"
+    fi
 }
 get_shell
 
-
-# A combined certificate bundle can be created from the operating system 
-# certificate store (which already contains both standard certificates and 
-# Netskope certificates) with the following commands:
-security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain /Library/Keychains/System.keychain > /tmp/nscacert_combined.pem
-cp /tmp/nscacert_combined.pem /Library/Application\ Support/Netskope/STAgent/data/
-
-certDir="/Library/Application\ Support/Netskope/STAgent/data"
+mkdir -p /Users/Shared/Netskope
+tenantName=$4
+orgKey=$5
+certDir="/Users/Shared/Netskope"
 certName="nscacert_combined.pem"
+
+status_code=$(curl -k --write-out %{http_code} --silent --output /dev/null https://$tenantName/locallogin)
+
+if [[ "$status_code" -ne "307" ]] ; then
+  echo "Tenant Unreachable"
+  exit 1
+else
+  echo "Tenant Reachable"
+fi
+
+# Function to create or update certificate bundle
+create_cert_bundle() {
+  echo "Creating cert bundle"
+  curl -k "https://addon-$tenantName/config/ca/cert?orgkey=$orgKey" > $certDir/$certName
+  curl -k "https://addon-$tenantName/config/org/cert?orgkey=$orgKey" >> $certDir/$certName
+  curl -k -L "https://ccadb-public.secure.force.com/mozilla/IncludedRootsPEMTxt?TrustBitsInclude=Websites" >> $certDir/$certName
+}
+
+if [ -f "$certDir/$certName" ]; then
+  echo "$certName already exists in $certDir."
+  read -p "Recreate Certificate Bundle? (y/N) " -n 1 -r
+  echo    
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    create_cert_bundle
+  fi
+else
+  create_cert_bundle
+fi
+
+
 
 # Function to check if a command exists
 command_exists() {
-  	command -v "$1" >/dev/null 2>&1
+    command -v "$1" >/dev/null 2>&1
 }
 
 # Function to configure a tool with the certificate bundle
