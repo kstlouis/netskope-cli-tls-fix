@@ -22,3 +22,4 @@ Output:
 - list sources/credit. _something something great artists steal._
 - actually test via Jamf policy deployment. "run as user" segments probably need review.
 - clean up / comment out any tools known not to be used in our org. 
+- re-learn how to use git, apparently.
