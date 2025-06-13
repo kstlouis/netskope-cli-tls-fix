@@ -49,15 +49,18 @@ configure_tool() {
   echo
   if command_exists "$check_command"; then
     echo "$tool_name is installed"
-    #$check_command --version
+    #$check_command --version. # this is noisy af, leave out unless needed
     if [[ -n "$env_var" ]]; then
+      export_line="export $env_var=\"$certDir/$certName\""
       if [[ ${!env_var} == "$certDir/$certName" ]]; then
         echo "$tool_name already configured"
+      elif grep -Fxq "$export_line" "$shell"; then
+        echo "$tool_name already configured in $shell"
+        source "$shell"
       else
-        echo "export $env_var=\"$certDir/$certName\"" >> $shell
+        echo "$export_line" >> "$shell"
         echo "$tool_name configured"
-        source $shell
-        #echo "export $env_var=\"$certDir/$certName\"" >> configured_tools.sh
+        source "$shell"
       fi
     fi
     if [[ -n "$post_command" ]]; then
