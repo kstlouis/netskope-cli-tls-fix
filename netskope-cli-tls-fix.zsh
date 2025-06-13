@@ -33,10 +33,11 @@ get_shell
 # A combined certificate bundle can be created from the operating system 
 # certificate store (which already contains both standard certificates and 
 # Netskope certificates) with the following commands:
+mkdir /Users/Shared/Netskope
 security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain /Library/Keychains/System.keychain > /tmp/nscacert_combined.pem
-cp /tmp/nscacert_combined.pem /Library/Application\ Support/Netskope/STAgent/data/
+cp /tmp/nscacert_combined.pem /Users/Shared/Netskope/
 
-certDir="/Library/Application\ Support/Netskope/STAgent/data"
+certDir="/Users/Shared/Netskope"
 certName="nscacert_combined.pem"
 
 # Function to check if a command exists
