@@ -23,3 +23,11 @@ Output:
 - actually test via Jamf policy deployment. "run as user" segments probably need review.
 - clean up / comment out any tools known not to be used in our org. 
 - re-learn how to use git, apparently.
+
+# Inspiration
+
+This is mostly a horrible demon-child of Netskope community documentation and other git repo's for netskope tls inspection workarounds. 
+- duduke's [ssl-configure-scripts](https://github.com/duduke/ssl-configure-scripts/tree/main)
+- [Configuring CLI-based Tools and Development Frameworks to work with Netskope SSL Interception (deprecated)](https://docs.netskope.com/en/configuring-cli-based-tools-and-development-frameworks-to-work-with-netskope-ssl-interception)
+- [Configuring CLI-based Tools and Development Frameworks to work with Netskope SSL Interception](https://community.netskope.com/next-gen-swg-2/configuring-cli-based-tools-and-development-frameworks-to-work-with-netskope-ssl-interception-7015)
+
