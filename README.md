@@ -1,30 +1,29 @@
 # What that thang do 
 
+This script will:
+- find local system certs and create a combined cert bundle for Netskope and AWS
+- create (or update) `.zshrc` and `.bashrc` files to include env variables for common CLI tools to use the new cert bundle
+- directly configure a tool if it's not possible to export an env var for it (such as npm, yarn, etc)
+
 ### For testing:
 - save the script locally 
 - run `chmod +x netskope-cli-tls-fix.sh` then `sudo ./netskope-cli-tls-fix.sh`
-- you'll need the use an `.env` file or similar to pass the org info usually passed as Jamf script parameters
+- if deployed via Jamf, it will always run as root, but `sudo` will be required if running locally
 
-(if deployed via jamf, it will always run as root, but `sudo` will be required if running locally)
+### Clean up .zshenv/.bash_profile
+Previous versions of this script wrote to either `.bash_profile` or `.zshev`, instead of their respective `rc` files. You may want to remove the added sections or the entire file if you hadn't used it previously.
 
-Output:
-- review stdout 
-- Check `~/.zshenv` (or `~/.bash_profile"` for new items related to any installed tools 
-- `configured_tools.sh` should also exist in the same dir and list all configuration changes applied, unless it's commented out.
 
 ### For deployment via MDM:
 
-- this script _should_ be service-agnostic, other than tweaking how the tenantName and orgKey are passed in. However, I have no experience with other MDMs. 
-- Before deploying, comment out all lines related to `configured_tools.sh`. Useful for testing but otherwise just junk.
-
+- this script _should_ be service-agnostic. However, I have no experience with other MDMs besides Jamf.
 # TODO
 
 - list sources/credit. _something something great artists steal._
-- actually test via Jamf policy deployment. "run as user" segments probably need review.
-- remove / comment out any tools known not to be used in our org. 
-- re-learn how to use git, apparently 🙃
+- actually test via Jamf policy deployment. Local testing isn't fully representative bc Jamf runs as root.
+- re-learn how to use git, apparently. What are branches? 😅
 
-# Inspiration
+# Thanks
 
 This is mostly a horrible demon-child of Netskope community documentation and other git repo's for netskope tls inspection workarounds. 
 - duduke's [ssl-configure-scripts](https://github.com/duduke/ssl-configure-scripts/tree/main)
